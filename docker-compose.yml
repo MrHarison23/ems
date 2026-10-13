@@ -1,0 +1,29 @@
+services:
+  app: 
+    build: ./app
+    container_name: app
+    restart: always
+
+  web: 
+    image: cr.yandex/mirror/nginx:latest
+    container_name: web 
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - app
+  db: 
+    image: postgres:16
+    container_name: db
+    restart: always
+    environment: 
+      POSTGRES_DB: flaskdb
+      POSTGRES_USER: flaskuser
+      POSTGRES_PASSWORD: flaskpass
+    volumes: 
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
