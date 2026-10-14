@@ -29,6 +29,11 @@
                         </a>
                         
                     </td>
+                    <td>
+                        <form method="post" action="/delete/{{user[0]}}">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>                        
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -38,6 +43,7 @@
                 <input name="employee_email" type="email" placeholder="ivan@example.com">
                 <input name="employee_position" type="text" placeholder="DevOps">
                 <button type="submit">Continue</button>
+                <button type="submit">Update</button>
             </form>
         </center>
     </body>

@@ -30,7 +30,55 @@ def add_employee():
 	conn.close()
 
 	return redirect(url_for('home')) 
+
+@app.route('/delete/<int:user_id>', methods=['POST'])
+def delete_employee(user_id):
+
+	conn = psycopg2.connect(
+		host = "db",
+		database = "flaskdb",
+		user = "flaskuser",
+		password = "flaskpass"
+	)
+
+	cur = conn.cursor()
+
+	cur.execute(
+		"DELETE FROM users WHERE id = %s", 
+		(user_id,)
+	)
 	
+	conn.commit()
+
+	cur.close()
+	conn.close()
+
+	return redirect(url_for('home')) 
+
+@app.route('GET /edit/<int:user_id>', methods=['POST'])
+def update_employee(user_id):
+
+	conn = psycopg2.connect(
+		host = "db",
+		database = "flaskdb",
+		user = "flaskuser",
+		password = "flaskpass"
+	)
+
+	cur = conn.cursor()
+
+	cur.execute(
+		"SELECT id, name, email, position FROM users WHERE id = %s", 
+		(user_id,)
+	)
+	
+	conn.commit()
+
+	cur.close()
+	conn.close()
+
+	return redirect(url_for('home')) 
+
 @app.route('/')
 def home():
 	conn = psycopg2.connect(
