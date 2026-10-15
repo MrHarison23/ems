@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Employee Management System</title>
+    </head>
+    <body>
+        <center>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>NAME</th>
+                        <th>EMAIL</th>
+                        <th>POSITION</th>
+                    </tr>
+                </thead>
+                <tbody>    
+                    {% for user in users %}
+                    <tr>    
+                        <td>{{ user[0] }}</td>
+                        <td>{{ user[1] }}</td>
+                        <td>{{ user[2] }}</td>
+                        <td>{{ user[3] }}</td>
+                        <td><a href="/edit/{{ user[0] }}">Edit</a></td>
+                    <td>
+                        
+                        <a = href="/edit/{{ employee_name }}" class="btn-action btn-edit" title="Редактировать">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </a>
+                        
+                    </td>
+                    <td>
+                        <form method="post" action="/delete/{{user[0]}}">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>                        
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <form method="post" action="/update/{{ user[0] }}">
+                <input name="employee_name" value="{{ user[1] }}">
+                <input name="employee_email" type="email" value="{{ user[2] }}">
+                <input name="employee_position" type="text" value="{{ user[3] }}">
+                <button type="submit">Continue</button>
+                <button type="submit">Update</button>
+            </form>
+        </center>
+    </body>
+</html>

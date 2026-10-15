@@ -55,8 +55,11 @@ def delete_employee(user_id):
 
 	return redirect(url_for('home')) 
 
-@app.route('GET /edit/<int:user_id>', methods=['POST'])
+@app.route('/edit/<int:user_id>', methods=['POST'])
 def update_employee(user_id):
+	employee_name = request.form.get('employee_name')
+	employee_email = request.form.get('employee_email')
+	employee_position = request.form.get('employee_position')
 
 	conn = psycopg2.connect(
 		host = "db",
@@ -68,16 +71,18 @@ def update_employee(user_id):
 	cur = conn.cursor()
 
 	cur.execute(
-		"SELECT id, name, email, position FROM users WHERE id = %s", 
+		"UPDATE users SET name = %s, email = %s, position = %s WHERE id = %s", 
 		(user_id,)
 	)
 	
+	user = cur.fetchone()
+
 	conn.commit()
 
 	cur.close()
 	conn.close()
 
-	return redirect(url_for('home')) 
+	redirect(url_for('home'))
 
 @app.route('/')
 def home():
