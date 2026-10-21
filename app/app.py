@@ -5,107 +5,102 @@ app = Flask(__name__)
 
 @app.route('/add', methods=['POST'])
 def add_employee():
-	employee_name = request.form.get('employee_name')
-	employee_email = request.form.get('employee_email')
-	employee_position = request.form.get('employee_position')
+    employee_name = request.form.get('employee_name')
+    employee_email = request.form.get('employee_email')
+    employee_position = request.form.get('employee_position')
 
 
-	conn = psycopg2.connect(
-		host = "db",
-		database = "flaskdb",
-		user = "flaskuser",
-		password = "flaskpass"
-	)
+    conn = psycopg2.connect(
+        host = "db",
+        database = "flaskdb",
+        user = "flaskuser",
+        password = "flaskpass"
+    )
 
-	cur = conn.cursor()
+    cur = conn.cursor()
 
-	cur.execute(
-		"INSERT INTO users (name, email, position) VALUES (%s, %s, %s)", 
-		(employee_name, employee_email, employee_position)
-	)
-	
-	conn.commit()
+    cur.execute(
+        "INSERT INTO users (name, email, position) VALUES (%s, %s, %s)", 
+        (employee_name, employee_email, employee_position)
+    )
 
-	cur.close()
-	conn.close()
+    conn.commit()
 
-	return redirect(url_for('home')) 
+    cur.close()
+    conn.close()
+
+    return redirect(url_for('home')) 
 
 @app.route('/delete/<int:user_id>', methods=['POST'])
 def delete_employee(user_id):
 
-	conn = psycopg2.connect(
-		host = "db",
-		database = "flaskdb",
-		user = "flaskuser",
-		password = "flaskpass"
-	)
+    conn = psycopg2.connect(
+        host = "db",
+        database = "flaskdb",
+        user = "flaskuser",
+        password = "flaskpass"
+    )
 
-	cur = conn.cursor()
+    cur = conn.cursor()
 
-	cur.execute(
-		"DELETE FROM users WHERE id = %s", 
-		(user_id,)
-	)
-	
-	conn.commit()
+    cur.execute(
+        "DELETE FROM users WHERE id = %s", 
+        (user_id,)
+    )
 
-	cur.close()
-	conn.close()
+    conn.commit()
 
-	return redirect(url_for('home')) 
+    cur.close()
+    conn.close()
 
-@app.route('/edit/<int:user_id>', methods=['POST'])
+    return redirect(url_for('home')) 
+
+@app.route('/update/<int:user_id>', methods=['POST'])
 def update_employee(user_id):
-	employee_name = request.form.get('employee_name')
-	employee_email = request.form.get('employee_email')
-	employee_position = request.form.get('employee_position')
+    employee_name = request.form.get('employee_name')
+    employee_email = request.form.get('employee_email')
+    employee_position = request.form.get('employee_position')
 
-	conn = psycopg2.connect(
-		host = "db",
-		database = "flaskdb",
-		user = "flaskuser",
-		password = "flaskpass"
-	)
+    conn = psycopg2.connect(
+        host = "db",
+        database = "flaskdb",
+        user = "flaskuser",
+        password = "flaskpass"
+    )
 
-	cur = conn.cursor()
+    cur = conn.cursor()
 
-	cur.execute(
-		"UPDATE users SET name = %s, email = %s, position = %s WHERE id = %s", 
-		(user_id,)
-	)
-	
-	user = cur.fetchone()
+    cur.execute("UPDATE users SET name = %s, email = %s, position = %s WHERE id = %s", (employee_name, employee_email, employee_position, user_id))
+    
+    conn.commit()
 
-	conn.commit()
+    cur.close()
+    conn.close()
 
-	cur.close()
-	conn.close()
-
-	redirect(url_for('home'))
+    return redirect(url_for('home'))
 
 @app.route('/')
 def home():
-	conn = psycopg2.connect(
-		host = "db",
-		database = "flaskdb",
-		user = "flaskuser",
-		password = "flaskpass"
-	)
+    conn = psycopg2.connect(
+        host = "db",
+        database = "flaskdb",
+        user = "flaskuser",
+        password = "flaskpass"
+    )
 
-	promo = "Employee Management System"
-	
-	cur = conn.cursor()
-	
-	cur.execute("SELECT id, name, email, position FROM users")
-	
-	users = cur.fetchall()
-	
-	print("DEBUG:", users) 
+    promo = "Employee Management System"
+    
+    cur = conn.cursor()
+    
+    cur.execute("SELECT id, name, email, position FROM users")
+    
+    users = cur.fetchall()
+    
+    print("DEBUG:", users) 
 
-	cur.close()
-	conn.close()
-	return render_template('index.html', users=users)
+    cur.close()
+    conn.close()
+    return render_template('index.html', users=users)
     
 if __name__ == "__main__":
-	app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
