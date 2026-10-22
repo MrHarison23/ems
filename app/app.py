@@ -79,6 +79,27 @@ def update_employee(user_id):
 
     return redirect(url_for('home'))
 
+@app.route('/edit/<int:user_id>')
+def edit_employee(user_id):
+    conn = psycopg2.connect(
+        host = "db",
+        database = "flaskdb",
+        user = "flaskuser",
+        password = "flaskpass"
+    )
+
+    promo = "Employee Management System"
+    
+    cur = conn.cursor()
+    
+    cur.execute("SELECT id, name, email, position FROM users WHERE id = %s", (user_id,))
+    
+    user = cur.fetchone()
+
+    cur.close()
+    conn.close()
+    return render_template('edit.html', user=user)
+
 @app.route('/')
 def home():
     conn = psycopg2.connect(
