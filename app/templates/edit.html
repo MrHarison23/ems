@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Employee Management System</title>
+    </head>
+    <body>
+        <center>
+            <form method="post" action="/update/{{ user[0] }}">
+                <input name="employee_name" value="{{ user[1] }}">
+                <input name="employee_email" type="email" value="{{ user[2] }}">
+                <input name="employee_position" type="text" value="{{ user[3] }}">
+                <button type="submit">Save</button>
+            </form>
+        </center>
+    </body>
+</html>

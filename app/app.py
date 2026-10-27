@@ -3,12 +3,19 @@ import psycopg2
 
 app = Flask(__name__)
 
+from flask import Flask, request, jsonify, render_template
+
+app = Flask(__name__)
+       
 @app.route('/add', methods=['POST'])
 def add_employee():
     employee_name = request.form.get('employee_name')
     employee_email = request.form.get('employee_email')
     employee_position = request.form.get('employee_position')
-
+        
+    if not employee_name or not employee_email or not employee_position or employee_name.strip() == "":
+            
+        return render_template('index.html', user=user)
 
     conn = psycopg2.connect(
         host = "db",
@@ -109,19 +116,15 @@ def home():
         password = "flaskpass"
     )
 
-    promo = "Employee Management System"
-    
     cur = conn.cursor()
     
     cur.execute("SELECT id, name, email, position FROM users")
     
     users = cur.fetchall()
-    
-    print("DEBUG:", users) 
 
     cur.close()
     conn.close()
     return render_template('index.html', users=users)
     
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=False)
