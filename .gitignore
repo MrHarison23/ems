@@ -1,3 +1,5 @@
 # Логи и кеш
 __pycache__/
 *.pyc
+*.env
+.env
